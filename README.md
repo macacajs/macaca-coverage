@@ -25,6 +25,31 @@
 $ npm i macaca-coverage --save-dev
 ```
 
+## Usage
+
+```javascript
+import Coverage from 'macaca-coverage';
+
+const {
+  collector,
+  Reporter,
+} = Coverage({
+  runtime: 'web' // web, iOS, Android
+});
+
+const reporter = new Reporter();
+
+collector.add(__coverage__);
+
+reporter.addAll([
+  'html',
+  'lcov'
+]);
+
+reporter.write(collector, true, () => {
+});
+```
+
 ## License
 
 The MIT License (MIT)
