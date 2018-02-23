@@ -17,7 +17,7 @@
 [download-image]: https://img.shields.io/npm/dm/macaca-coverage.svg?style=flat-square
 [download-url]: https://npmjs.org/package/macaca-coverage
 
-> macaca coverage
+> macaca coverage command-line tool
 
 ## Installment
 

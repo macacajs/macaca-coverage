@@ -1,6 +1,6 @@
 {
   "name": "macaca-coverage",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "macaca coverage",
   "keywords": [
     "macaca",
@@ -27,7 +27,7 @@
     "pre-commit": "*"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "istanbul cover `npm bin`/_mocha",
     "lint": "eslint . --fix"
   },
   "pre-commit": [
