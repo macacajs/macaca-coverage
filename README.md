@@ -17,15 +17,24 @@
 [download-image]: https://img.shields.io/npm/dm/macaca-coverage.svg?style=flat-square
 [download-url]: https://npmjs.org/package/macaca-coverage
 
-> macaca coverage
+> Macaca coverage tool
 
-## Installment
+## Use as CLI
+
+Install Macaca command-line tool form npm
+
+```bash
+$ npm i macaca-cli -g
+$ macaca coverage -h
+```
+
+## Use as Node.js module
+
+Install it form npm
 
 ```bash
 $ npm i macaca-coverage --save-dev
 ```
-
-## Usage
 
 ```javascript
 import Coverage from 'macaca-coverage';
