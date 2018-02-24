@@ -1,9 +1,10 @@
 'use strict';
 
-var coverage = require('..');
+const coverage = require('..');
+const assert = require('assert');
 
-describe('test', function() {
-  it('should be ok', function() {
-    coverage.should.be.ok();
+describe('test', () => {
+  it('should be ok', () => {
+    assert.ok(coverage);
   });
 });

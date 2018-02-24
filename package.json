@@ -1,34 +1,37 @@
 {
   "name": "macaca-coverage",
-  "version": "1.1.0",
-  "description": "macaca coverage",
+  "version": "1.0.1",
+  "description": "Macaca coverage tool",
   "keywords": [
     "macaca",
-    "coverage"
+    "coverage",
+    "iOS",
+    "Android"
   ],
-  "bin": {
-    "macaca-coverage": "./bin/macaca-coverage"
-  },
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/macacajs/macaca-coverage.git"
   },
+  "homepage": "https://macacajs.github.io/coverage",
   "dependencies": {
-    "macaca-istanbul": "^1.0.2"
+    "macaca-istanbul": "^1.0.2",
+    "shelljs": "^0.8.1",
+    "xlogger": "^1.0.6",
+    "xml2map": "^1.0.2",
+    "xutil": "^1.0.10"
   },
   "devDependencies": {
     "co-mocha": "*",
     "eslint": "*",
     "eslint-plugin-mocha": "^4.11.0",
     "mocha": "*",
-    "should": "*",
     "istanbul": "*",
     "pre-commit": "*"
   },
   "scripts": {
     "test": "istanbul cover `npm bin`/_mocha",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix --ext .js"
   },
   "pre-commit": [
     "lint"
