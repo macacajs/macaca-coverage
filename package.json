@@ -25,14 +25,16 @@
     "co-mocha": "*",
     "eslint": "*",
     "eslint-plugin-mocha": "^4.11.0",
-    "mocha": "*",
+    "git-contributor": "^1.0.3",
     "istanbul": "*",
+    "mocha": "*",
     "pre-commit": "*"
   },
   "scripts": {
     "ci": "npm run lint && npm run test",
     "test": "istanbul cover `npm bin`/_mocha",
-    "lint": "eslint . --fix --ext .js"
+    "lint": "eslint . --fix --ext .js",
+    "contributor": "git-contributor"
   },
   "pre-commit": [
     "lint"
