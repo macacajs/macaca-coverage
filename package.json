@@ -1,6 +1,6 @@
 {
   "name": "macaca-coverage",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Macaca coverage tool",
   "keywords": [
     "macaca",
@@ -8,7 +8,14 @@
     "iOS",
     "Android"
   ],
+  "bin": {
+    "macaca-coverage": "./bin/macaca-coverage.js"
+  },
   "main": "index.js",
+  "files": [
+    "bin/**/*.js",
+    "lib/**/*.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/macacajs/macaca-coverage.git"
