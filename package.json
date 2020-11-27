@@ -1,6 +1,6 @@
 {
   "name": "macaca-coverage",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Macaca coverage tool",
   "keywords": [
     "macaca",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://macacajs.github.io/coverage",
   "dependencies": {
+    "commander": "^6.2.0",
     "macaca-istanbul": "^1.0.2",
     "shelljs": "^0.8.1",
     "xlogger": "^1.0.6",
