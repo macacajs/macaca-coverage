@@ -1,17 +1,17 @@
 # macaca-coverage
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
+[![build status][CI-image]][CI-url]
+[![Test coverage][codecov-image]][codecov-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/macaca-coverage.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/macaca-coverage
-[travis-image]: https://img.shields.io/travis/macacajs/macaca-coverage.svg?style=flat-square
-[travis-url]: https://travis-ci.org/macacajs/macaca-coverage
-[coveralls-image]: https://img.shields.io/coveralls/macacajs/macaca-coverage.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/macacajs/macaca-coverage?branch=master
+[CI-image]: https://github.com/macacajs/macaca-coverage/actions/workflows/ci.yml/badge.svg
+[CI-url]: https://github.com/macacajs/macaca-coverage/actions/workflows/ci.yml
+[codecov-image]: https://img.shields.io/codecov/c/github/macacajs/macaca-coverage.svg?logo=codecov
+[codecov-url]: https://app.codecov.io/gh/macacajs/macaca-coverage
 [node-image]: https://img.shields.io/badge/node.js-%3E=_8-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/macaca-coverage.svg?style=flat-square
