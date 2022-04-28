@@ -154,7 +154,7 @@
     "strict": 0,
     "use-isnan": 2,
     "valid-jsdoc": 0,
-    "valid-typeof": 2,
+    "valid-typeof": 0,
     "vars-on-top": 0,
     "wrap-iife": [2, "any"],
     "wrap-regex": 0,
