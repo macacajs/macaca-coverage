@@ -1,7 +1,0 @@
-node_modules
-coverage/
-reporter/
-.travis.yml
-*.tgz
-*.sw*
-*.un~

@@ -6,15 +6,15 @@
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 
-[npm-image]: https://img.shields.io/npm/v/macaca-coverage.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/macaca-coverage.svg
 [npm-url]: https://npmjs.org/package/macaca-coverage
 [CI-image]: https://github.com/macacajs/macaca-coverage/actions/workflows/ci.yml/badge.svg
 [CI-url]: https://github.com/macacajs/macaca-coverage/actions/workflows/ci.yml
 [codecov-image]: https://img.shields.io/codecov/c/github/macacajs/macaca-coverage.svg?logo=codecov
 [codecov-url]: https://app.codecov.io/gh/macacajs/macaca-coverage
-[node-image]: https://img.shields.io/badge/node.js-%3E=_8-green.svg?style=flat-square
+[node-image]: https://img.shields.io/badge/node.js-%3E=_16-green.svg
 [node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/macaca-coverage.svg?style=flat-square
+[download-image]: https://img.shields.io/npm/dm/macaca-coverage.svg
 [download-url]: https://npmjs.org/package/macaca-coverage
 
 > Macaca coverage tool
