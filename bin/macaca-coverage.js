@@ -26,9 +26,9 @@ if (program.versions) {
 if (program.file) {
   const {
     collector,
-    Reporter
+    Reporter,
   } = Coverage({
-    runtime: 'web'
+    runtime: 'web',
   });
   const coverageFile = path.resolve(program.file);
   const __coverage__ = JSON.parse(fs.readFileSync(coverageFile, 'utf8'));
@@ -38,7 +38,7 @@ if (program.file) {
   reporter.addAll([
     'html',
     'lcov',
-    'json'
+    'json',
   ]);
   reporter.write(collector, true, () => {
     const coverageHtml = path.join(distDir, 'index.html');

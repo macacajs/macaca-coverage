@@ -9,7 +9,8 @@
     "Android"
   ],
   "bin": {
-    "macaca-coverage": "./bin/macaca-coverage.js"
+    "macaca-coverage": "./bin/macaca-coverage.js",
+    "macaca-diff": "./bin/macaca-diff.js"
   },
   "main": "index.js",
   "files": [
@@ -24,6 +25,7 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "commander": "^6.2.0",
+    "last-commit-log": "^3.2.0",
     "macaca-istanbul": "^1.0.18",
     "shelljs": "^0.8.1",
     "xlogger": "^1.0.6",
@@ -31,7 +33,9 @@
   },
   "devDependencies": {
     "co-mocha": "*",
-    "eslint": "*",
+    "eslint": "7",
+    "eslint-config-egg": "^11.0.1",
+    "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-mocha": "^4.11.0",
     "git-contributor": "^1.0.3",
     "istanbul": "*",
