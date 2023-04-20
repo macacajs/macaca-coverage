@@ -6,7 +6,7 @@ const getDiff = require('../lib/core/diff');
 
 program
   .option('-t, --targetBranch [String]', 'Run locally.', 'master')
-  .option('-o, --output [String]', 'Diff save path.', 'coverage.diff.json');
+  .option('-o, --output [String]', 'Diff save path.', 'coverage-diff.json');
 
 program.action(async (option) => {
 
