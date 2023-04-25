@@ -37,6 +37,7 @@
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-mocha": "^4.11.0",
     "git-contributor": "^1.0.3",
+    "husky": "^8.0.3",
     "minimatch": "^5.1.6",
     "mocha": "*",
     "nyc": "*",
@@ -51,8 +52,10 @@
     "lint": "eslint . --fix --ext .js",
     "contributor": "git-contributor"
   },
-  "pre-commit": [
-    "lint"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "license": "MIT"
 }
