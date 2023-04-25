@@ -2,7 +2,7 @@
 
 const path = require('path');
 const assert = require('assert');
-const { incrementalReporter } = require('../lib/core/incremental-coverage');
+const { incrementalReporter } = require('../lib/web/incremental-coverage');
 const cwd = process.cwd();
 
 describe('./test/incremental-coverage.test.js', () => {
@@ -29,8 +29,8 @@ describe('./test/incremental-coverage.test.js', () => {
   })
   it('incremental coverage should work', () => {
     const incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      projectPath: cwd,
-      reporterPath: path.join(cwd, 'test/fixture/report'),
+      cwd,
+      output: path.join(cwd, 'test/fixture/report'),
     });
     assert.equal(incrementalMap.coverage[test1].s[1], 1);
     assert.equal(incrementalMap.coverage[test2], undefined);
@@ -40,8 +40,8 @@ describe('./test/incremental-coverage.test.js', () => {
   it('incremental summary should work', () => {
 
     let incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      projectPath: cwd,
-      reporterPath: path.join(cwd, 'test/fixture/report'),
+      cwd,
+      output: path.join(cwd, 'test/fixture/report'),
     });
     const summary1 = incrementalMap.summary[test1];
     assert.equal(summary1.statements.cover, 11);
@@ -56,9 +56,9 @@ describe('./test/incremental-coverage.test.js', () => {
 
     // needCollectedIncludes config
     incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      projectPath: process.cwd(),
+      cwd,
       needCollectedIncludes: ['**/test2.js'],
-      reporterPath: path.join(process.cwd(), 'test/fixture/report'),
+      output: path.join(cwd, 'test/fixture/report'),
     });
 
     const summary3 = incrementalMap.summary[test2];
@@ -73,9 +73,9 @@ describe('./test/incremental-coverage.test.js', () => {
 
   it('incremental reporter should work', () => {
      const incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      projectPath: process.cwd(),
+      cwd,
       needCollectedIncludes: ['**/test2.js', '**/test4.js'],
-      reporterPath: path.join(process.cwd(), 'test/fixture/report'),
+      output: path.join(cwd, 'test/fixture/report'),
     });
 
     const reg = /<td class="coverage-percent".*>\d+%<\/td>/g;

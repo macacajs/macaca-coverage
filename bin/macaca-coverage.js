@@ -65,7 +65,7 @@ program
       currentBranch: getCurrentBranch({ cwd }),
       targetBranch: 'master',
       coverageJsonFile: path.resolve(cwd, 'coverage/coverage-final.json'),
-      output: cwd,
+      output: path.resolve(cwd, 'coverage'),
       cwd,
     };
 
@@ -79,23 +79,24 @@ program
     options.coverageJsonFile = path.resolve(cwd, options.coverageJsonFile);
     options.output = path.resolve(cwd, options.output);
     mkdirp(options.output);
-    options.diffFileName = 'diff-data.json';
-    options.diffReporterFileName = 'diff-repoter.html';
     logger.info('diff command options:\n%j', options);
 
     // step2, generate git diff json
     const diffData = getDiffData(options);
-    const diffDataFilePath = path.resolve(options.output, options.diffFileName);
+    const diffDataFilePath = path.resolve(options.output, 'diff-data.json');
     logger.info('gen diff data: %s', diffDataFilePath);
     fs.writeFileSync(diffDataFilePath, JSON.stringify(diffData, null, 2));
 
     // step3, generate diff reporter
     const coverageMap = require(options.coverageJsonFile);
-
-    const diffReporterFilePath = path.resolve(options.output, options.diffReporterFileName);
     const incrementalMap = incrementalReporter(coverageMap, diffData, options);
+    const coverageReporterFilePath = path.resolve(options.output, 'index.html');
+    const reporterHtmlFilePath = path.resolve(options.output, 'diff-repoter.txt');
+    const diffReporterFilePath = path.resolve(options.output, 'diff-repoter.html');
+    logger.info('gen diff reporter: %s', coverageReporterFilePath);
+    logger.info('gen coverage reporter: %s', coverageReporterFilePath);
 
-    console.info(incrementalMap);
+    fs.writeFileSync(reporterHtmlFilePath, incrementalMap.reporterHtml);
     fs.writeFileSync(diffReporterFilePath, summaryTemplate(incrementalMap.reporterHtml));
   });
 

@@ -3,7 +3,7 @@ node_modules
 npm-debug.log
 coverage
 .nyc_output
-test/temp
+test/fixture/**/index.html
 *.gz
 *.sw*
 *.un~
