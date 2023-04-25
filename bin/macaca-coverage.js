@@ -10,8 +10,7 @@ const Coverage = require('..');
 const _ = require('lodash');
 const mkdirp = require('mkdirp').sync;
 const { getCurrentBranch, getDiffData } = require('../lib/common/git-diff');
-const summaryTemplate = require('../lib/web/template/summary-template');
-const { incrementalReporter } = require('../lib/web/incremental-coverage');
+const { writeIncrementalReporter } = require('../lib/web/incremental-coverage');
 const logger = require('../lib/common/logger');
 
 const pkg = require('../package.json');
@@ -88,16 +87,7 @@ program
     fs.writeFileSync(diffDataFilePath, JSON.stringify(diffData, null, 2));
 
     // step3, generate diff reporter
-    const coverageMap = require(options.coverageJsonFile);
-    const incrementalMap = incrementalReporter(coverageMap, diffData, options);
-    const coverageReporterFilePath = path.resolve(options.output, 'index.html');
-    const reporterHtmlFilePath = path.resolve(options.output, 'diff-repoter.txt');
-    const diffReporterFilePath = path.resolve(options.output, 'diff-repoter.html');
-    logger.info('gen diff reporter: %s', coverageReporterFilePath);
-    logger.info('gen coverage reporter: %s', coverageReporterFilePath);
-
-    fs.writeFileSync(reporterHtmlFilePath, incrementalMap.reporterHtml);
-    fs.writeFileSync(diffReporterFilePath, summaryTemplate(incrementalMap.reporterHtml));
+    writeIncrementalReporter(diffData, options);
   });
 
 program.parse(process.argv);

@@ -1,88 +1,83 @@
 'use strict';
 
-const path = require('path');
-const assert = require('assert');
-const { incrementalReporter } = require('../lib/web/incremental-coverage');
-const cwd = process.cwd();
+const minimatch = require('minimatch');
+const assert = require('power-assert');
+const {
+  renderIncrementalReporter,
+  getIncrementalCoverage,
+} = require('../lib/web/incremental-coverage');
 
-describe('./test/incremental-coverage.test.js', () => {
+describe('./test/incremental-coverage.test.js', () => { 
+  const test1 = 'test/fixture/report/test1.js';
+  const test2 = 'test/fixture/report/test2.js';
+  const test3 = 'test/fixture/report/test3.js';
+  const diffMap = require('./fixture/test-coverage-diff.json');
+  const coverageMap = require('./fixture/test-coverage-final.json');
 
-  const newDiffMap = {};
-  const newCoverageMap = {};
-  const test1 = path.join(cwd, 'test/fixture/report/test1.js');
-  const test2 = path.join(cwd, 'test/fixture/report/test2.js');
-  const test3 = path.join(cwd, 'test/fixture/report/test3.js');
- 
-  before('before', () => {
-    const diffMap = require('./fixture/test-coverage-diff.json');
-    const coverageMap = require('./fixture/test-coverage-final.json');
-    
-    for (const file in diffMap) {
-      const filePath = path.join(cwd, file);
-      newDiffMap[filePath] = diffMap[file];
-    }
+  describe('getIncrementalCoverage()', () => {
+    let res;
 
-    for (const file in coverageMap) {
-      const filePath = path.join(cwd, file);
-      newCoverageMap[filePath] = coverageMap[file];
-    }
-  })
-  it('incremental coverage should work', () => {
-    const incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      cwd,
-      output: path.join(cwd, 'test/fixture/report'),
+    it('should be ok', () => {
+      res = getIncrementalCoverage(coverageMap, diffMap);
+      assert.equal(res.coverage[test1].s[1], 1);
+      assert.deepEqual(res.coverage[test2], undefined);
+      assert.deepEqual(res.coverage[test3], undefined);
+
+      const summary1 = res.summary[test1];
+      assert.equal(summary1.statements.cover, 11);
+      assert.equal(summary1.statements.total, 12);
+      assert.equal(summary1.branchs.cover, 2);
+      assert.equal(summary1.branchs.total, 4);
+      assert.equal(summary1.functions.cover, 4);
+      assert.equal(summary1.functions.total, 6);
     });
-    assert.equal(incrementalMap.coverage[test1].s[1], 1);
-    assert.equal(incrementalMap.coverage[test2], undefined);
-    assert.equal(incrementalMap.coverage[test3], undefined);
+
+    it('filter should be ok', () => {
+      res = getIncrementalCoverage(coverageMap, diffMap, (currentFile) => {
+        return [
+          '**/test2.js',
+          '**/test4.js'
+        ].some(reg => minimatch(currentFile, reg));
+      });
+      assert.equal(res.coverage[test1].s[1], 1);
+      assert.deepEqual(res.coverage[test2], undefined);
+      assert.deepEqual(res.coverage[test3], undefined);
+
+      const summary1 = res.summary[test1];
+      assert.equal(summary1.statements.cover, 11);
+      assert.equal(summary1.statements.total, 12);
+      assert.equal(summary1.branchs.cover, 2);
+      assert.equal(summary1.branchs.total, 4);
+      assert.equal(summary1.functions.cover, 4);
+      assert.equal(summary1.functions.total, 6);
+
+      const summary2 = res.summary[test2];
+      assert.equal(summary2.statements.total, 32);
+      assert.equal(summary2.branchs.cover, 0);
+      assert.equal(summary2.branchs.total, 0);
+      assert.equal(summary2.functions.cover, 0);
+      assert.equal(summary2.functions.total, 0);
+    });
   });
 
-  it('incremental summary should work', () => {
+  describe('renderIncrementalReporter()', () => {
+    let res;
+    const cwd = process.cwd();
 
-    let incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      cwd,
-      output: path.join(cwd, 'test/fixture/report'),
+    it('should be ok', () => {
+      res = getIncrementalCoverage(coverageMap, diffMap, (currentFile) => {
+        return [
+          '**/test2.js',
+          '**/test4.js'
+        ].some(reg => minimatch(currentFile, reg));
+      });
+      res = renderIncrementalReporter(res, { cwd, output: cwd });
+      const reg = /<td class="coverage-percent".*>\d+%<\/td>/g;
+      res = res.match(reg) || [];
+      assert.equal(res.length, 3);
+      assert(res[0].includes('75%'));
+      assert(res[1].includes('92%'));
+      assert(res[2].includes('0%'));
     });
-    const summary1 = incrementalMap.summary[test1];
-    assert.equal(summary1.statements.cover, 11);
-    assert.equal(summary1.statements.total, 12);
-    assert.equal(summary1.branchs.cover, 2);
-    assert.equal(summary1.branchs.total, 4);
-    assert.equal(summary1.functions.cover, 4);
-    assert.equal(summary1.functions.total, 6);
-
-    const summary2 = incrementalMap.summary[test2];
-    assert.equal(summary2, undefined);
-
-    // needCollectedIncludes config
-    incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      cwd,
-      needCollectedIncludes: ['**/test2.js'],
-      output: path.join(cwd, 'test/fixture/report'),
-    });
-
-    const summary3 = incrementalMap.summary[test2];
-    assert.equal(summary3.statements.cover, 0);
-    assert.equal(summary3.statements.total, 32);
-    assert.equal(summary3.branchs.cover, 0);
-    assert.equal(summary3.branchs.total, 0);
-    assert.equal(summary3.functions.cover, 0);
-    assert.equal(summary3.functions.total, 0);
-
-  });
-
-  it('incremental reporter should work', () => {
-     const incrementalMap = incrementalReporter(newCoverageMap, newDiffMap, {
-      cwd,
-      needCollectedIncludes: ['**/test2.js', '**/test4.js'],
-      output: path.join(cwd, 'test/fixture/report'),
-    });
-
-    const reg = /<td class="coverage-percent".*>\d+%<\/td>/g;
-    let list = incrementalMap.reporterHtml.match(reg) || [];
-    assert.equal(list.length, 3);
-    assert(list[0].includes('75%'));
-    assert(list[1].includes('92%'));
-    assert(list[2].includes('0%'));
   });
 });

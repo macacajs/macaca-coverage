@@ -1,6 +1,6 @@
 {
   "name": "macaca-coverage",
-  "version": "1.1.0-beta.0",
+  "version": "1.1.0-beta.2",
   "description": "Macaca coverage tool",
   "keywords": [
     "macaca",
@@ -37,14 +37,17 @@
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-mocha": "^4.11.0",
     "git-contributor": "^1.0.3",
-    "nyc": "*",
+    "minimatch": "^5.1.6",
     "mocha": "*",
+    "nyc": "*",
+    "power-assert": "^1.6.1",
     "pre-commit": "*"
   },
   "scripts": {
     "ci": "npm run lint && npm run test",
     "test:lcov": "nyc --reporter=lcov --reporter=text mocha --recursive",
-    "test:json": "nyc --reporter=json --reporter=text mocha --recursive",
+    "clean": "rm -rf coverage test/temp",
+    "test": "nyc --reporter=json --reporter=text mocha --recursive",
     "lint": "eslint . --fix --ext .js",
     "contributor": "git-contributor"
   },
