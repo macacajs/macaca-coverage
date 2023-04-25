@@ -1,6 +1,6 @@
 {
   "name": "macaca-coverage",
-  "version": "1.0.9",
+  "version": "1.1.0-beta.2",
   "description": "Macaca coverage tool",
   "keywords": [
     "macaca",
@@ -24,6 +24,7 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "commander": "^6.2.0",
+    "last-commit-log": "^3.2.0",
     "macaca-istanbul": "^1.0.18",
     "shelljs": "^0.8.1",
     "xlogger": "^1.0.6",
@@ -31,21 +32,30 @@
   },
   "devDependencies": {
     "co-mocha": "*",
-    "eslint": "*",
+    "eslint": "7",
+    "eslint-config-egg": "^11.0.1",
+    "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-mocha": "^4.11.0",
     "git-contributor": "^1.0.3",
-    "istanbul": "*",
+    "husky": "^8.0.3",
+    "minimatch": "^5.1.6",
     "mocha": "*",
+    "nyc": "*",
+    "power-assert": "^1.6.1",
     "pre-commit": "*"
   },
   "scripts": {
     "ci": "npm run lint && npm run test",
-    "test": "istanbul cover `npm bin`/_mocha",
+    "test:lcov": "nyc --reporter=lcov --reporter=text mocha --recursive",
+    "clean": "rm -rf coverage test/temp",
+    "test": "nyc --reporter=json --reporter=text mocha --recursive",
     "lint": "eslint . --fix --ext .js",
     "contributor": "git-contributor"
   },
-  "pre-commit": [
-    "lint"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "license": "MIT"
 }
