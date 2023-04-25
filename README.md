@@ -24,8 +24,11 @@
 Install Macaca command-line tool form npm
 
 ```bash
-$ npm i macaca-cli -g
-$ macaca coverage -h
+$ npm i macaca-coverage -g
+```
+
+```bash
+$ macaca-coverage diff --target-branch master --coverage-json-file ./coverage/coverage-final.json --output ./test/temp
 ```
 
 ## Use as Node.js module

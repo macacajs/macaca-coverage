@@ -7,9 +7,12 @@ const path = require('path');
 const EOL = require('os').EOL;
 const program = require('commander');
 const Coverage = require('..');
-const getDiff = require('../lib/core/diff');
-const summaryTemplate = require('../lib/template/summary-template');
-const { incrementalReporter } = require('../lib/core/incremental-coverage');
+const _ = require('lodash');
+const mkdirp = require('mkdirp').sync;
+const { getCurrentBranch, getDiffData } = require('../lib/common/git-diff');
+const summaryTemplate = require('../lib/web/template/summary-template');
+const { incrementalReporter } = require('../lib/web/incremental-coverage');
+const logger = require('../lib/common/logger');
 
 const pkg = require('../package.json');
 const cwd = process.cwd();
@@ -47,62 +50,53 @@ program
       });
     } else {
       program.help();
-      process.exit(0);
     }
   });
 
 program
   .command('diff')
-  .description('Get diff')
-  .option('-c, --currentBranch [String]', 'current branch.', null)
-  .option('-t, --targetBranch [String]', 'target branch.', 'master')
-  .option('-o, --output [String]', 'diff save path.', 'coverage-diff.json')
-  .action(async (option) => {
+  .description('generage diff')
+  .option('--current-branch [String]', 'current git branch name')
+  .option('--target-branch [String]', 'target git branch name')
+  .option('--coverage-json-file [String]', 'existed coverage json file')
+  .option('--output [String]', 'output directory.')
+  .action(async (cmdOptions) => {
+    const defaultOptions = {
+      currentBranch: getCurrentBranch({ cwd }),
+      targetBranch: 'master',
+      coverageJsonFile: path.resolve(cwd, 'coverage/coverage-final.json'),
+      output: cwd,
+      cwd,
+    };
 
-    const output = option.output;
-    const currentBranch = option.currentBranch;
-    const targetBranch = option.targetBranch;
+    // step1, get options
+    const options = Object.assign(defaultOptions, _.pick(cmdOptions, [
+      'currentBranch',
+      'targetBranch',
+      'coverageJsonFile',
+      'output',
+    ]));
+    options.coverageJsonFile = path.resolve(cwd, options.coverageJsonFile);
+    options.output = path.resolve(cwd, options.output);
+    mkdirp(options.output);
+    options.diffFileName = 'diff-data.json';
+    options.diffReporterFileName = 'diff-repoter.html';
+    logger.info('diff command options:\n%j', options);
 
-    const diffMap = await getDiff(cwd, currentBranch, targetBranch);
-    const newDiffMap = {};
-    for (const file in diffMap) {
-      const filePath = path.join(cwd, file);
-      newDiffMap[filePath] = diffMap[file];
-    }
+    // step2, generate git diff json
+    const diffData = getDiffData(options);
+    const diffDataFilePath = path.resolve(options.output, options.diffFileName);
+    logger.info('gen diff data: %s', diffDataFilePath);
+    fs.writeFileSync(diffDataFilePath, JSON.stringify(diffData, null, 2));
 
-    console.info(`diff path: ${output}`);
+    // step3, generate diff reporter
+    const coverageMap = require(options.coverageJsonFile);
 
-    fs.writeFileSync(output, JSON.stringify(newDiffMap, null, 2));
-  });
-
-program
-  .command('incremental-reporter')
-  .description('Get incremental reporter')
-  .option('-c, --coveragePath [String]', 'coverage path.', 'coverage/coverage-final.json')
-  .option('-d, --diffPath [String]', 'diff path.', 'coverage-diff.json')
-  .option('-o, --output [String]', 'reporter path.', 'coverage')
-  .action(async (option) => {
-
-    const output = path.join(cwd, option.output);
-    const summaryHtmlpath = path.join(output, 'summary.html');
-    const diffPath = path.join(cwd, option.diffPath);
-    const coveragePath = path.join(cwd, option.coveragePath);
-    console.info(`diff path: ${diffPath}`);
-    console.info(`coverage path: ${coveragePath}`);
-
-    const diffMap = require(diffPath);
-    const coverageMap = require(coveragePath);
-
-    const incrementalMap = incrementalReporter(coverageMap, diffMap, {
-      projectPath: cwd,
-      needCollectedIncludes: process.env.INCREMENTAL_NEED_COLLECTED_INCLUDES || [],
-      reporterPath: output,
-    });
+    const diffReporterFilePath = path.resolve(options.output, options.diffReporterFileName);
+    const incrementalMap = incrementalReporter(coverageMap, diffData, options);
 
     console.info(incrementalMap);
-    console.info(`reporter: ${output}`);
-    console.info(`summary: ${summaryHtmlpath}`);
-    fs.writeFileSync(summaryHtmlpath, summaryTemplate(incrementalMap.reporterHtml));
+    fs.writeFileSync(diffReporterFilePath, summaryTemplate(incrementalMap.reporterHtml));
   });
 
 program.parse(process.argv);
